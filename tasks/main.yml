@@ -6,21 +6,33 @@
     state: present
   become: true
 
+- name: Create vcpkg user
+  user:
+    name: "{{ vcpkg_user }}"
+    shell: /bin/bash
+    append: yes
+
 - name: Clone vcpkg
   git:
     repo: "{{vcpkg_repo}}"
     dest: "{{vcpkg_path}}"
     update: "{{ vcpkg_update_git_install }}"
+  become: yes
+  become_user: "{{ vcpkg_user }}"
 
 - name: Vcpkg boostrap
   command: ./bootstrap-vcpkg.sh
   args:
     chdir: "{{vcpkg_path}}"
     creates: "{{vcpkg_path}}/vcpkg"
+  become: yes
+  become_user: "{{ vcpkg_user }}"
 
 - name: Install vcpkg ports
   command: "./vcpkg install {{item}}"
   args:
     chdir: "{{vcpkg_path}}"
   with_items: "{{vcpkg_install_ports}}"
+  become: yes
+  become_user: "{{ vcpkg_user }}"
     
