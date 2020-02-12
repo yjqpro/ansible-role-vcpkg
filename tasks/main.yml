@@ -1,0 +1,26 @@
+---
+
+- name: Install Vcpkg boostrap dependencies
+  apt:
+    pkg: "{{ vcpkg_boostrap_dependecnies }}"
+    state: present
+  become: true
+
+- name: Clone vcpkg
+  git:
+    repo: "{{vcpkg_repo}}"
+    dest: "{{vcpkg_path}}"
+    update: "{{ vcpkg_update_git_install }}"
+
+- name: Vcpkg boostrap
+  command: ./bootstrap-vcpkg.sh
+  args:
+    chdir: "{{vcpkg_path}}"
+    creates: "{{vcpkg_path}}/vcpkg"
+
+- name: Install vcpkg ports
+  command: "./vcpkg install {{item}}"
+  args:
+    chdir: "{{vcpkg_path}}"
+  with_items: "{{vcpkg_install_ports}}"
+    

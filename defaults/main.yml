@@ -1,0 +1,20 @@
+---
+vcpkg_repo: https://github.com/yjqpro/vcpkg.git
+vcpkg_path: "{{ ansible_env.HOME }}/vcpkg"
+vcpkg_update_git_install: no
+
+vcpkg_boostrap_dependecnies:
+  - curl
+  - unzip
+  - tar
+vcpkg_install_ports:
+  - spdlog
+  - yaml-cpp
+  - caf
+  - hdf5
+  - boost
+  - crow
+  - cppzmq
+  - protobuf
+  - gtest
+  - nlohmann-json
